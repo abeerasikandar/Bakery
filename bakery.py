@@ -1,85 +1,64 @@
 import streamlit as st
 import os
 
-# Function to check if image exists and return a valid path
+# Function to load images
 def load_image(image_path, default_path):
-    print(f"Checking for image at: {image_path}")
     if os.path.exists(image_path):
         return image_path
     else:
-        print(f"Image '{image_path}' not found. Using default image.")
         return default_path
 
-# Logo and app title
-logo_path = load_image("lady_baker_logo.jpg", "default_logo.jpg")  # Add your bakery logo here
+# Set title
+st.title("Alex Bakes")
+
+# Load and display the logo
+logo_path = load_image("lady_baker_logo.jpg", "default_logo.jpg")
 st.image(logo_path, width=150)
-st.title("Alex Bakes 🍰")
-st.subheader("Delicious Baked Goods, Delivered Fresh to Your Door")
 
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-if uploaded_file is not None:
-    st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
-
-
-# Bakery menu with prices and images
+# Menu items with prices and images
 menu = {
     "Balgarian Chocolate Cake": {"price": 1500, "image": load_image("chocolate_cake.jpg", "default_cake.jpg")},
-    "Red Velvet Cake": {"price": 1800, "image": load_image("red_velvet.jpg", "default_cake.jpg")},
-    "Coconut Truffle Cake": {"price": 1600, "image": load_image("coconut_truffle.jpg", "default_cake.jpg")},
-    "Lemon Tart": {"price": 500, "image": load_image("lemon_tart.jpg", "default_tart.jpg")},
-    "Apple Pie": {"price": 600, "image": load_image("apple_pie.jpg", "default_pie.jpg")},
-    "Banana Pie": {"price": 550, "image": load_image("banana_pie.jpg", "default_pie.jpg")},
-    "Roasted Almonds Cake": {"price": 1700, "image": load_image("roasted_almonds.jpg", "default_cake.jpg")},
-    "Salted Caramel Pie": {"price": 700, "image": load_image("salted_caramel.jpg", "default_pie.jpg")},
-    "Muffins (Mixed Flavors)": {"price": 300, "image": load_image("muffins.jpg", "default_muffins.jpg")},
-    "Cupcakes (Mixed Flavors)": {"price": 250, "image": load_image("cupcakes.jpg", "default_cupcakes.jpg")}
+    "Red Velvet Cake": {"price": 1600, "image": load_image("red_velvet.jpg", "default_cake.jpg")},
+    "Coconut Truffle Cake": {"price": 1700, "image": load_image("coconut_truffle.jpg", "default_cake.jpg")},
+    "Lemon Tart": {"price": 800, "image": load_image("lemon_tart.jpg", "default_tart.jpg")},
+    "Apple Pie": {"price": 900, "image": load_image("apple_pie.jpg", "default_pie.jpg")},
+    "Banana Pie": {"price": 950, "image": load_image("banana_pie.jpg", "default_pie.jpg")},
+    "Roasted Almonds Cake": {"price": 1400, "image": load_image("roasted_almonds.jpg", "default_cake.jpg")},
+    "Salted Caramel Pie": {"price": 1100, "image": load_image("salted_caramel.jpg", "default_pie.jpg")},
+    "Muffins": {"price": 500, "image": load_image("muffins.jpg", "default_muffins.jpg")},
+    "Cupcakes": {"price": 600, "image": load_image("cupcakes.jpg", "default_cupcakes.jpg")},
 }
 
-# Shopping cart
+# Cart
 cart = []
 
-# Display the menu with prices and images
-st.subheader("Menu")
+# Display menu items
 for item, details in menu.items():
-    col1, col2 = st.columns([1, 2])
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
     with col1:
-        st.image(details["image"], width=120)  # Add the image for the menu item
+        st.image(details["image"], use_column_width=True)
+    
     with col2:
-        st.write(f"**{item}** - Rs {details['price']}")
-        if st.button(f"Add {item} to cart", key=item):
-            cart.append((item, details["price"]))
+        st.subheader(item)
+        st.write(f"Price: PKR {details['price']}")
+        if st.button(f"Add {item} to Cart"):
+            cart.append(item)
             st.success(f"{item} added to cart!")
+    
+    with col3:
+        st.write("")  # For spacing
 
-# Show cart items and total
+# Checkout section
 st.subheader("Your Cart")
 if cart:
-    total = 0
-    for item, price in cart:
-        st.write(f"{item}: Rs {price}")
-        total += price
-    st.write(f"**Total (without shipping): Rs {total}**")
-
-    # Ask for the customer's location
-    location = st.text_input("Enter your city for shipping", "")
-
-    # Add free shipping for Islamabad
-    shipping = 0 if location.lower() == "islamabad" else 200
-    st.write(f"**Shipping Cost: Rs {shipping}**")
-    st.write("Note: Free shipping is available only for Islamabad.")
-    
-    # Add a complimentary cupcake
-    st.write("**Complimentary Cupcake added! 🍰**")
-
-    # Final total
-    final_total = total + shipping
-    st.write(f"**Final Total: Rs {final_total}**")
-
-    # Checkout button
+    for item in cart:
+        st.write(item)
+    st.write("Total: PKR", sum(menu[item]["price"] for item in cart))
     if st.button("Checkout"):
-        st.success(f"Order confirmed! Your total is Rs {final_total}. Thank you for shopping at Alex Bakes!")
+        st.success("Thank you for your order! A complimentary cupcake will be included.")
 else:
-    st.write("Your cart is empty. Add some items to start!")
+    st.write("Your cart is empty.")
 
-# Footer
-st.write("---")
-st.write("Made with ❤️ by Alex Bakes. Freshly baked for you!")
+# Display complimentary cupcake
+st.write("Note: A complimentary cupcake will be included with every order!")
