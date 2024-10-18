@@ -3,10 +3,11 @@ import os
 
 # Function to check if image exists and return a valid path
 def load_image(image_path, default_path):
+    print(f"Checking for image at: {image_path}")
     if os.path.exists(image_path):
         return image_path
     else:
-        st.warning(f"Image '{image_path}' not found. Using default image.")
+        print(f"Image '{image_path}' not found. Using default image.")
         return default_path
 
 # Logo and app title
