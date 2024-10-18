@@ -1,22 +1,32 @@
 import streamlit as st
+import os
+
+# Function to check if image exists and return a valid path
+def load_image(image_path, default_path):
+    if os.path.exists(image_path):
+        return image_path
+    else:
+        st.warning(f"Image '{image_path}' not found. Using default image.")
+        return default_path
 
 # Logo and app title
-st.image("lady_baker_logo.jpg", width=150)  # Add your bakery logo here
+logo_path = load_image("lady_baker_logo.jpg", "default_logo.jpg")  # Add your bakery logo here
+st.image(logo_path, width=150)
 st.title("Alex Bakes 🍰")
 st.subheader("Delicious Baked Goods, Delivered Fresh to Your Door")
 
 # Bakery menu with prices and images
 menu = {
-    "Balgarian Chocolate Cake": {"price": 1500, "image": "chocolate_cake.jpg"},
-    "Red Velvet Cake": {"price": 1800, "image": "red_velvet.jpg"},
-    "Coconut Truffle Cake": {"price": 1600, "image": "coconut_truffle.jpg"},
-    "Lemon Tart": {"price": 500, "image": "lemon_tart.jpg"},
-    "Apple Pie": {"price": 600, "image": "apple_pie.jpg"},
-    "Banana Pie": {"price": 550, "image": "banana_pie.jpg"},
-    "Roasted Almonds Cake": {"price": 1700, "image": "roasted_almonds.jpg"},
-    "Salted Caramel Pie": {"price": 700, "image": "salted_caramel.jpg"},
-    "Muffins (Mixed Flavors)": {"price": 300, "image": "muffins.jpg"},
-    "Cupcakes (Mixed Flavors)": {"price": 250, "image": "cupcakes.jpg"}
+    "Balgarian Chocolate Cake": {"price": 1500, "image": load_image("chocolate_cake.jpg", "default_cake.jpg")},
+    "Red Velvet Cake": {"price": 1800, "image": load_image("red_velvet.jpg", "default_cake.jpg")},
+    "Coconut Truffle Cake": {"price": 1600, "image": load_image("coconut_truffle.jpg", "default_cake.jpg")},
+    "Lemon Tart": {"price": 500, "image": load_image("lemon_tart.jpg", "default_tart.jpg")},
+    "Apple Pie": {"price": 600, "image": load_image("apple_pie.jpg", "default_pie.jpg")},
+    "Banana Pie": {"price": 550, "image": load_image("banana_pie.jpg", "default_pie.jpg")},
+    "Roasted Almonds Cake": {"price": 1700, "image": load_image("roasted_almonds.jpg", "default_cake.jpg")},
+    "Salted Caramel Pie": {"price": 700, "image": load_image("salted_caramel.jpg", "default_pie.jpg")},
+    "Muffins (Mixed Flavors)": {"price": 300, "image": load_image("muffins.jpg", "default_muffins.jpg")},
+    "Cupcakes (Mixed Flavors)": {"price": 250, "image": load_image("cupcakes.jpg", "default_cupcakes.jpg")}
 }
 
 # Shopping cart
