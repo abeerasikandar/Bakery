@@ -16,6 +16,11 @@ st.image(logo_path, width=150)
 st.title("Alex Bakes 🍰")
 st.subheader("Delicious Baked Goods, Delivered Fresh to Your Door")
 
+uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+if uploaded_file is not None:
+    st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+
+
 # Bakery menu with prices and images
 menu = {
     "Balgarian Chocolate Cake": {"price": 1500, "image": load_image("chocolate_cake.jpg", "default_cake.jpg")},
